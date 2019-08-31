@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  php:
+    build:
+      context: ./build/docker/php
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www/html
+
+  nginx:
+    build:
+      context: ./build/docker/nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/var/www/html/public:ro
+
+  mongo:
+    # In production, you may want to use a managed database service
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=time-api
+      - MONGO_INITDB_ROOT_USERNAME=time-api
+      # You should definitely change the password in production
+      - MONGO_INITDB_ROOT_PASSWORD=verysecret
+    volumes:
+      - mongodb-data:/var/lib/mongodb/data:rw
+    ports:
+      - "27017:27017"
+
+  mongoexpress:
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: time-api
+      ME_CONFIG_MONGODB_ADMINPASSWORD: verysecret
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+
+volumes:
+  mongodb-data: ~
