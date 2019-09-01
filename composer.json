@@ -1,8 +1,10 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^7.1.3",
+        "doctrine/mongodb-odm-bundle": "^4.0.0@beta",
+        "doctrine/mongodb-odm": "^2.0.0@beta",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/api-pack": "^1.2",
@@ -55,7 +57,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "4.3.*"
         }
     }
