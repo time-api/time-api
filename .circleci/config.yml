@@ -31,14 +31,14 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: docker-compose exec --user 1000 composer install             
+      - run: docker-compose exec --user 1000 php composer install             
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
             
-      - run: docker-compose exec --user 1000 vendor/bin/codecept build 
-      - run: docker-compose exec --user 1000 vendor/bin/codecept run 
+      - run: docker-compose exec --user 1000 php vendor/bin/codecept build 
+      - run: docker-compose exec --user 1000 php vendor/bin/codecept run 
 
     #  - run: sudo apt update
     #  - run: sudo docker-php-ext-install zip
