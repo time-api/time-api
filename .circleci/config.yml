@@ -20,10 +20,9 @@ jobs:
 
     steps:
       - checkout
-
-      - run: sudo apt update
-      - run: sudo docker-php-ext-install zip
-
+      - run: docker-compose build php
+      - run: docker-compose up -d
+      
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -31,12 +30,31 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-
-      - run: composer install -n --prefer-dist
+      - run: docker-compose exec --user 1000 composer install             
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
+            
+      - run: docker-compose exec --user 1000 vendor/bin/codecept build 
+      - run: docker-compose exec --user 1000 vendor/bin/codecept run 
+
+    #  - run: sudo apt update
+    #  - run: sudo docker-php-ext-install zip
+
+      # Download and cache dependencies
+      #- restore_cache:
+      #    keys:
+      #      # "composer.lock" can be used if it is committed to the repo
+      #      - v1-dependencies-{{ checksum "composer.json" }}
+      #      # fallback to using the latest cache if no exact match is found
+      #      - v1-dependencies-#
+#
+#      - run: composer install -n --prefer-dist
+#      - save_cache:
+#          key: v1-dependencies-{{ checksum "composer.json" }}
+#          paths:
+#            - ./vendor
 
       # prepare the database
       #- run: touch storage/testing.sqlite
@@ -44,5 +62,5 @@ jobs:
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+#      - run: ./vendor/bin/codecept build
+#      - run: ./vendor/bin/codecept run
