@@ -10,9 +10,12 @@ RUN apt-get -q update \
     && apt-get -qq -y --no-install-recommends install \
         ca-certificates \
         php7.3-fpm \
+        php-curl \
+        php-mbstring \
         php-mongodb \
         php-xml \
         php-zip \
+        unzip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* /tmp/* /var/tmp/*
 

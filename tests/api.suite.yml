@@ -1,0 +1,16 @@
+# Codeception Test Suite Configuration
+#
+# Suite for API tests.
+# see https://codeception.com/docs/10-WebServices
+
+actor: ApiTester
+modules:
+  enabled:
+    - REST:
+        url: /
+        depends: Symfony
+        part: JSON
+    - Symfony:
+        app_path: 'src'
+        environment: 'test'
+
