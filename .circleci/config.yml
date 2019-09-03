@@ -21,8 +21,10 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - run: pwd
+      - run: ls -al
       - run: docker-compose up -d
-      - run: docker-compose exec --user 1000 php ls -al
+      - run: docker-compose exec --user 1000 php ls -al *
       
       # Download and cache dependencies
       - restore_cache:
