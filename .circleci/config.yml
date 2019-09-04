@@ -20,6 +20,7 @@ jobs:
 
     steps:
       - checkout
+      - run: uname -a
       - run: sudo apt-get update
       - run: sudo apt-get -qq -y install php-mongodb
 
