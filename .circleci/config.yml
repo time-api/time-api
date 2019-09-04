@@ -20,8 +20,8 @@ jobs:
 
     steps:
       - checkout
-      - run: apt-get update
-      - run: apt-get -qq -y install php-mongodb
+      - run: sudo apt-get update
+      - run: sudo apt-get -qq -y install php-mongodb
 
       # Download and cache dependencies
       - restore_cache:
