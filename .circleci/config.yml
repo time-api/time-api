@@ -22,7 +22,7 @@ jobs:
       - checkout
       - run: uname -a
       - run: sudo apt-get update
-      - run: sudo apt-get -qq -y install php-mongodb
+      - run: docker-php-ext-install mongodb
 
       # Download and cache dependencies
       - restore_cache:
