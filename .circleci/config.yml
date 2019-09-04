@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: php/7.3-fpm-buster
+      - image: php:7.3-fpm-buster
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -22,6 +22,7 @@ jobs:
       - checkout
       - run: sudo apt-get update
       - run: sudo apt-cache search mongo
+      - run: sudo apt-get install php-mongodb
       - run: sudo docker-php-ext-install mongodb
 
       # Download and cache dependencies
