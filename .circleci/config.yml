@@ -20,9 +20,8 @@ jobs:
 
     steps:
       - checkout
-      - run: uname -a
       - run: sudo apt-get update
-      - run: docker-php-ext-install mongodb
+      - run: sudo docker-php-ext-install mongodb
 
       # Download and cache dependencies
       - restore_cache:
