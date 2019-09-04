@@ -22,7 +22,7 @@ jobs:
       - checkout
       - run: apt-get update
       - run: apt-cache search mongo
-      - run: apt-get install php-mongodb
+      - run: apt-get update && apt-get install php-mongodb
 
       # Download and cache dependencies
       - restore_cache:
