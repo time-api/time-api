@@ -20,10 +20,9 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt-get update
-      - run: sudo apt-cache search mongo
-      - run: sudo apt-get install php-mongodb
-      - run: sudo docker-php-ext-install mongodb
+      - run: apt-get update
+      - run: apt-cache search mongo
+      - run: apt-get install php-mongodb
 
       # Download and cache dependencies
       - restore_cache:
