@@ -21,6 +21,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update
+      - run: sudo apt-cache search mongo
       - run: sudo docker-php-ext-install mongodb
 
       # Download and cache dependencies
