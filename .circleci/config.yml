@@ -13,5 +13,5 @@ jobs:
       - setup_remote_docker
       - run: docker-compose build
       - run: docker-compose up -d
-      - run: vendor/bin/codecept build
-      - run: vendor/bin/codecept run
+      - run: vendor/bin/codecept -f docker-compose.yml build
+      - run: vendor/bin/codecept -f docker-compose.yml run
