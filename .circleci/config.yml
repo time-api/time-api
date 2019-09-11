@@ -9,7 +9,8 @@ jobs:
       - image: circleci/php:cli-buster
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run: docker-compose -f docker-compose.yml build
       - run: docker-compose -f docker-compose.yml up -d
       - run: docker-compose exec php vendor/bin/codecept build
