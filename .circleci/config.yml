@@ -10,11 +10,21 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - restore_cache: # special step to restore the dependency cache if `composer.lock` does not change
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
       - run: docker-compose -f docker-compose.yml build
       - run: docker-compose -f docker-compose.yml up -d
       - run: docker-compose exec php vendor/bin/codecept build
       - run: docker-compose exec php vendor/bin/codecept run --xml
       - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):/var/www/html/var/tests/output ./tests_output
+      # Copy vendor dependencies for caching
+      - run: rm -rf ./vendor
+      - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):vendor/ .
+      - save_cache: # special step to save the dependency cache with the `composer.lock` cache key template
+            key: composer-v1-{{ checksum "composer.lock" }}
+            paths:
+              - vendor
       - store_test_results:
           path: tests_output/
       - store_artifacts:
