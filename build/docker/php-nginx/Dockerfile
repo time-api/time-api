@@ -29,9 +29,10 @@ COPY build/docker/php-nginx/php-fpm.conf /etc/php/7.3/fpm/pool.d/z-overrides.con
 WORKDIR /var/www/html
 
 # Fix permissions
-RUN chown -R www-data.www-data /var/www
+RUN chown -R www-data.www-data /var/www && chmod u+s /usr/sbin/php-fpm7.3
 
 EXPOSE 9000
+WORKDIR /var/www/html
 
 CMD ["php-fpm7.3", "-F"]
 
@@ -52,7 +53,7 @@ RUN usermod -u ${WWW_DATA_UID} www-data
 RUN mkdir -p /var/www/html \
     && chown -R www-data.www-data /var/www
 
-WORKDIR /var/www/html
+USER www-data
 
 
 # ============================================================================
@@ -64,8 +65,7 @@ FROM base AS production
 
 # Copy project files
 COPY . /var/www/html
-RUN chown -R www-data . \
-    && chmod u+s /usr/sbin/php-fpm7.3
+RUN chown -R www-data .
 
 USER www-data
 

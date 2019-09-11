@@ -7,11 +7,15 @@ jobs:
   build:
     docker:
       - image: circleci/php:cli-buster
-
     steps:
       - checkout
       - setup_remote_docker
       - run: docker-compose -f docker-compose.yml build
       - run: docker-compose -f docker-compose.yml up -d
       - run: docker-compose exec php vendor/bin/codecept build
-      - run: docker-compose exec php vendor/bin/codecept run
+      - run: docker-compose exec php vendor/bin/codecept run --xml
+      - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):/var/www/html/var/tests/output ./tests_output
+      - store_test_results:
+          path: tests_output/
+      - store_artifacts:
+          path: tests_output/
