@@ -53,8 +53,6 @@ RUN usermod -u ${WWW_DATA_UID} www-data
 RUN mkdir -p /var/www/html \
     && chown -R www-data.www-data /var/www
 
-USER www-data
-
 
 # ============================================================================
 # PRODUCTION STAGE
