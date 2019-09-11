@@ -1,27 +1,36 @@
+#
+# Docker Compose configuration for PRODUCTION use
+#
+# Changes for development are in docker-compose.override.yml
+#
+
 version: '3.4'
 
 services:
   php:
     build:
-      context: ./build/docker/php
+      context: .
+      dockerfile: build/docker/php-nginx/Dockerfile
+      target: production
       args:
         # LOCAL_USER_ID comes from .env file
         WWW_DATA_UID: ${LOCAL_USER_ID}
     depends_on:
       - mongo
+    environment:
+      APP_ENV: prod
     ports:
       - "9000:9000"
-    #user:
-    volumes:
-      - .:/var/www/html
 
   nginx:
     build:
-      context: ./build/docker/nginx
+      context: .
+      dockerfile: build/docker/php-nginx/Dockerfile
+      target: web
+    depends_on:
+      - php
     ports:
       - "80:80"
-    volumes:
-      - ./public:/var/www/html/public:ro
 
   mongo:
     # In production, you may want to use a managed database service
