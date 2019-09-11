@@ -20,7 +20,7 @@ jobs:
       - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):/var/www/html/var/tests/output ./tests_output
       # Copy vendor dependencies for caching
       - run: rm -rf ./vendor
-      - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):vendor/ .
+      - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):/var/www/html/vendor/ .
       - save_cache: # special step to save the dependency cache with the `composer.lock` cache key template
             key: composer-v1-{{ checksum "composer.lock" }}
             paths:
