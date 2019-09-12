@@ -1,0 +1,19 @@
+#
+# Docker Compose overrides for DEVELOPMENT use
+#
+# This file is automatically merged with docker-compose.yml by docker-compose
+#
+version: '3.4'
+
+services:
+  php:
+    build:
+      target: development
+    environment:
+      APP_ENV: dev
+    volumes:
+      - .:/var/www/html
+
+  nginx:
+    volumes:
+      - .:/var/www/html

@@ -6,43 +6,18 @@ version: 2
 jobs:
   build:
     docker:
-      # Specify the version you desire here
-      - image: circleci/php:7.3
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
-
+      - image: circleci/php:cli-buster
     steps:
       - checkout
-
-      - run: sudo apt update
-      - run: sudo docker-php-ext-install zip
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - v1-dependencies-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: composer install -n --prefer-dist
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
-
-      # prepare the database
-      #- run: touch storage/testing.sqlite
-      #- run: php artisan migrate --env=testing --database=sqlite_testing --force
-
-      # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: docker-compose -f docker-compose.yml build
+      - run: docker-compose -f docker-compose.yml up -d
+      - run: docker-compose exec php vendor/bin/codecept build
+      - run: docker-compose exec php vendor/bin/codecept run --xml
+      # Copy test results to local environment
+      - run: docker cp $(docker-compose ps | grep php | cut -d ' ' -f 1):/var/www/html/var/tests/output ./tests_output
+      - store_test_results:
+          path: tests_output/
+      - store_artifacts:
+          path: tests_output/
